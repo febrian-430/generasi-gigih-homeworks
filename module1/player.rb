@@ -19,7 +19,6 @@ class Player
     end 
 
     def receive_hit(hit_power:)
-        # probability to deflect
         @hp = self.get_HP_after_hit(hit_power: hit_power)
         puts "#{@name} current hp: #{@hp.to_s}"
     end
