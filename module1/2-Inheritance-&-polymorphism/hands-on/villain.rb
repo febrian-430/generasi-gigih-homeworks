@@ -6,9 +6,23 @@ class Villain < Player
         @has_fled = false
     end
 
-    def flee?
-        @has_fled = true
-        return @current_hp <= (@hp/2) && rand(1..2) == 1
+    def flee
+        if @current_hp <= (@hp/2) && rand(1..2) == 1
+            @has_fled = true
+        end
+        return @has_fled 
+    end
+
+    def has_fled?
+        return @has_fled
+    end
+
+    def receive_hit(hit_power:)
+        if self.flee
+            puts "#@name has fled the battle"
+        else
+            super
+        end
     end
 end
 

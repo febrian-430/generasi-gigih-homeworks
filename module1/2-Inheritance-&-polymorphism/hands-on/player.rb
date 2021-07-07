@@ -21,9 +21,21 @@ class Player < Unit
         puts "#{@name} current hp: #{@hp.to_s}"
     end
     
+    def targeted_action(target:)
+        if target.kind_of? Player
+            self.hit(target)
+        else
+            enemy_unit = target.get_random_targeted_member
+            self.hit(enemy_unit)
+        end
+    end
+
     def hit(target:)
         puts "#{@name} attacks #{target.name} for #{@atk_power.to_s} dmg"
         target.receive_hit(hit_power: @atk_power)
     end
 
+    def get_targeted_member
+        return self
+    end
 end
