@@ -24,8 +24,8 @@ jin_playable = Playable.new(unit: jin)
 villains = [archer, spear, sword]
 vg = VillainGroup.new(name: "Mongols", units: villains)
 
-jin_members = [jin_playable, yuna, ishikawa]
-jin_party = PlayableGroup.new(name: "Jin Sakai party", units: jin_members)
+jin_members = [jin, yuna, ishikawa]
+jin_party = Group.new(name: "Jin Sakai party", units: jin_members)
 
 game = Game.new(player1: jin_party, player2: vg)
 

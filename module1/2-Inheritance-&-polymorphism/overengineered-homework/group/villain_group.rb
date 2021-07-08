@@ -4,6 +4,7 @@ require "./exceptions/incompatible_unit_group_error.rb"
 
 class VillainGroup < Group
     def initialize(name:, units:)
+        super
         @units = []
         units.each do |unit|
             if unit.kind_of?(Villain)
