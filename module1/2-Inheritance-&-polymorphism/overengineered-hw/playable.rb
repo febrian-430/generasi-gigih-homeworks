@@ -11,6 +11,10 @@ class Playable < Fightable
         return @unit.instance_of? Hero
     end
 
+    def can_heal_self?
+        return false
+    end
+
     def name 
         return @unit.name
     end
@@ -52,7 +56,7 @@ class Playable < Fightable
                 if member == self || member.is_dead?
                     next
                 end
-                puts "#{i+1}). #{member.name} #{member.inspect} #{@unit.inspect}"
+                puts "#{i+1}). #{member.name} #{member.inspect}"
             }
             target = self.get_target_from_prompt(group: @group)
             @unit.heal(target: target)
@@ -63,13 +67,21 @@ class Playable < Fightable
         @unit.receive_hit(hit_power: hit_power)
     end
 
+    def receive_heal(heal_amount:)
+        @unit.receive_heal(heal_amount: heal_amount)
+    end
+
     def targeted_action(target:)
-        action = self.action_prompt
-        case action
-        when 1
-            self.attack_prompt(enemy_group: target)
-        when 2
-            self.heal_prompt()
+        if @group != nil
+            action = self.action_prompt
+            case action
+            when 1
+                self.attack_prompt(enemy_group: target)
+            when 2
+                self.heal_prompt()
+            end
+        else
+            @unit.hit(target: target)
         end
     end
 

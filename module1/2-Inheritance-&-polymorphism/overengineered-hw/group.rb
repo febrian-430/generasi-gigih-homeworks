@@ -1,14 +1,18 @@
 require_relative "fightable"
+require "./exceptions/incompatible_unit_group_error.rb"
+
 
 class Group < Fightable
     attr_reader :name
     def initialize(name:, units: )
-        @units = units
+        @units = []
         @name = name
 
-        @units.map do |unit|
-            if unit.instance_of? Playable 
-                unit.group = self
+        units.each do |unit|
+            if unit.kind_of?(Player) || unit.kind_of?(Playable)
+                @units.append(unit)
+            else
+                raise IncompatibleUnitGroupError, "Group must contain only Player class or Playable class and its derivatives"
             end
         end
     end
