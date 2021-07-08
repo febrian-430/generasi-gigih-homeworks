@@ -1,4 +1,4 @@
-require_relative "player"
+require_relative "../fightable"
 require "./exceptions/incompatible_unit_group_error"
 
 class Playable < Fightable
@@ -62,7 +62,7 @@ class Playable < Fightable
                 if member == self || member.is_dead?
                     next
                 end
-                puts "#{i+1}). #{member.name} #{member.inspect}"
+                puts "#{i+1}). #{member.name}"
             }
             target = self.get_target_from_prompt(group_members: allies)
             @unit.heal(target: target)

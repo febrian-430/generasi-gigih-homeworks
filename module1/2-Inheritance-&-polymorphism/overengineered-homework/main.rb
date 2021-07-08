@@ -1,13 +1,13 @@
-require_relative "player"
 require_relative "game"
-require_relative "hero"
-require_relative "playable_group"
-require_relative "villain_group"
-require_relative "villain"
-require_relative "archer"
-require_relative "spearman"
-require_relative "swordsman"
-require_relative "playable"
+require "./person/player.rb"
+require "./person/hero.rb"
+require "./person/villain.rb"
+require "./person/archer.rb"
+require "./person/spearman.rb"
+require "./person/swordsman.rb"
+require "./person/playable.rb"
+require  "./group/playable_group.rb"
+require  "./group/villain_group.rb"
 
 
 archer = Archer.new(hp: 50, atk_power: 100)

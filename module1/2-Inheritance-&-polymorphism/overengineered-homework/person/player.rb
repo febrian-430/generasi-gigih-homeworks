@@ -1,5 +1,4 @@
-require_relative "group"
-require_relative "playable"
+require_relative "../fightable"
 
 class Player < Fightable
     attr_reader :name

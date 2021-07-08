@@ -1,4 +1,4 @@
-require_relative "fightable"
+require_relative "../fightable"
 require "./exceptions/incompatible_unit_group_error.rb"
 
 
