@@ -1,4 +1,5 @@
 require_relative "group"
+require_relative "playable"
 
 class Player < Fightable
     attr_reader :name
@@ -21,12 +22,16 @@ class Player < Fightable
         @hp = self.get_HP_after_hit(hit_power: hit_power)
         puts "#{@name} current hp: #{@hp.to_s}"
     end
+
+    def receive_heal(heal_amount:)
+        @hp += heal_amount
+    end
     
     def targeted_action(target:)
         if self.is_dead? || target.is_dead?
             return
         end
-        if target.kind_of? Player
+        if target.kind_of?(Player) || target.instance_of?(Playable)
             self.hit(target: target)
         else
             enemy_unit = target.get_random_targeted_member
@@ -43,5 +48,9 @@ class Player < Fightable
 
     def get_targeted_member
         return self
+    end
+
+    def to_s
+        return "#@name has #@hp and #@atk_power attack power"
     end
 end

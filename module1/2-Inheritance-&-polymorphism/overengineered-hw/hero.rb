@@ -12,11 +12,13 @@ class Hero < Player
         return rand(1..100) <= @deflect_chance ? true : false
     end
     
-    # def targeted_action(target:)
-    #     # puts "As #@name, what do you want to do this turn?"
-    #     #find enemy member and etc
-    #     self.hit(target: target)
-    # end
+
+    #TODO: abstract so not all hero can heal
+    def heal(target:)
+        heal_amount = 20
+        target.receive_heal(heal_amount: heal_amount)
+        puts "#@name healed #{target.name} for #{heal_amount}"
+    end
 
     def receive_hit(hit_power:)
         if self.is_dead?

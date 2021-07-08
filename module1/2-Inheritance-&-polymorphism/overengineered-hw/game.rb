@@ -6,15 +6,16 @@ class Game
     end
 
     def turn_action
-        puts "turn: #@turn_count"
+        puts "TURN: ##@turn_count"
+        puts @player1.to_s
+        puts 
+        puts @player2.to_s
+        puts 
         @player1.targeted_action(target: @player2)
         @player2.targeted_action(target: @player1)
         @turn_count+=1
     end
 
-    def next_turn
-        @firstPlayerTurn = !@firstPlayerTurn
-    end
 
     def simulate 
         loop do
@@ -27,7 +28,6 @@ class Game
             end
             self.turn_action
             puts ""
-            self.next_turn
         end
     end
 end

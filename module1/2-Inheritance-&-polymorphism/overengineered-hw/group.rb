@@ -1,12 +1,4 @@
-
-#abstraction
-class Fightable
-    def targeted_action(target:)
-    end
-
-    def is_dead?
-    end
-end
+require_relative "fightable"
 
 class Group < Fightable
     attr_reader :name
@@ -15,7 +7,7 @@ class Group < Fightable
         @name = name
 
         @units.map do |unit|
-            if unit.instance_of? Hero 
+            if unit.instance_of? Playable 
                 unit.group = self
             end
         end
@@ -35,16 +27,25 @@ class Group < Fightable
 
     def targeted_action(target:)
         self.update_state
-
         @units.each do |unit|
-            unit.targeted_action(target: target)
+            if !unit.is_dead?
+                unit.targeted_action(target: target)
+            end
         end
     end
 
-    def update_state()
+    def update_state
         if !self.is_dead?
             @units.delete_if { |unit| unit.is_dead? }
         end
+    end
+
+    def to_s
+        out = "#@name Party\n"
+        @units.each {
+            |unit|
+            out += "\t #{unit.to_s}"
+        }
     end
 end
 
