@@ -17,7 +17,7 @@ class Group < Fightable
         end
     end
 
-    def get_members()
+    def to_a()
         return @units
     end
 
@@ -48,8 +48,9 @@ class Group < Fightable
         out = "#@name Party\n"
         @units.each {
             |unit|
-            out += "\t #{unit.to_s}"
+            out += "\t #{unit.to_s}\n"
         }
+        return out
     end
 end
 

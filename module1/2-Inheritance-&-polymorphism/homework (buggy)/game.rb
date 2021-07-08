@@ -26,7 +26,7 @@ class Game
         puts "Which ally do you want to heal?"
         @group1.each_with_index {
             |member, i|
-            if i == 0 || member.is_dead?
+            if member.instance_of?(Hero) || member.is_dead?
                 next
             end
             puts "#{i}). #{member.name}"
@@ -37,7 +37,7 @@ class Game
 
     def turn_action
         @group1.each_with_index do |ally, i|
-            if i == 0 
+            if ally.instance_of?(Hero)
                 puts "As #{ally.name}, what do you want to do in this turn?"
                 puts "1) Attack an enemy"
                 puts "2) Heal an ally"
@@ -57,9 +57,7 @@ class Game
             end
         end
 
-        @group2.each_with_index {
-            |enemy, i|
-            
+        @group2.each_with_index do |enemy, i|
             if !enemy.is_dead? && @group1.length != 0
                 target_idx = rand(0..@group1.length)
                 target = @group1[target_idx]
@@ -67,7 +65,7 @@ class Game
                     enemy.hit(target: target)
                 end
             end
-        }
+        end
 
         @turn_count+=1
     end

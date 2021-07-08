@@ -51,6 +51,6 @@ class Player < Fightable
     end
 
     def to_s
-        return "#@name has #@hp and #@atk_power attack power"
+        return "#@name has #@hp hp and #@atk_power attack power"
     end
 end

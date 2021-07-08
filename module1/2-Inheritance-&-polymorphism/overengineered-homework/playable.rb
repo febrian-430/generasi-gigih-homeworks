@@ -1,9 +1,15 @@
 require_relative "player"
+require "./exceptions/incompatible_unit_group_error"
 
 class Playable < Fightable
     attr_writer :group
     def initialize(unit:)
         @unit = unit
+        if !unit.kind_of?(Player)
+            raise IncompatibleUnitGroupError, "The given object type is incompatible (must be Player type)"
+        else
+            @unit = unit
+        end
         @group = nil
     end
 
@@ -22,27 +28,26 @@ class Playable < Fightable
     def action_prompt()
         puts "As #{@unit.name}, what do you want to do in this turn?"
         puts "1) Attack an enemy"
-        puts "2) Heal an ally" if @unit.instance_of? Hero || @group == nil
+        puts "2) Heal an ally" if @unit.instance_of?(Hero) && @group != nil
         action = gets.chomp.to_i
         return action
     end
 
-    def get_target_from_prompt(group:)
+    def get_target_from_prompt(group_members:)
         target_idx = gets.chomp.to_i
-        members = group.get_members
-        return members[target_idx-1]
+        return group_members[target_idx-1]
     end
 
     def attack_prompt(enemy_group:)
         puts "Which enemy do you want to attack?"
-        
-        enemy_group.get_members.each_with_index do
+        enemies = enemy_group.to_a
+        enemies.each_with_index do
             |member, i|
             if !member.is_dead?
                 puts "#{i+1}). #{member.name}"
             end
         end
-        target = self.get_target_from_prompt(group: enemy_group)
+        target = self.get_target_from_prompt(group_members: enemies)
         @unit.hit(target: target)
     end
 
@@ -51,14 +56,15 @@ class Playable < Fightable
     def heal_prompt()
         if self.can_heal? || @group != nil
             puts "Which ally do you want to heal?"
-            @group.get_members.each_with_index {
+            allies = @group.to_a
+            allies.each_with_index {
                 |member, i|
                 if member == self || member.is_dead?
                     next
                 end
                 puts "#{i+1}). #{member.name} #{member.inspect}"
             }
-            target = self.get_target_from_prompt(group: @group)
+            target = self.get_target_from_prompt(group_members: allies)
             @unit.heal(target: target)
         end
     end
