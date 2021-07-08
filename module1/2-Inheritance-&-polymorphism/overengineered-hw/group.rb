@@ -21,21 +21,12 @@ class Group < Fightable
         end
     end
 
-    def no_units_left?
-        return @units.length == 0
-    end
-
     def get_members()
         return @units
     end
 
     def get_random_targeted_member
-        if !self.no_units_left?
-            rand_num = rand(0..@units.length)
-            return @units[rand_num]
-        else
-            return nil
-        end
+        return @units.sample
     end
 
     def is_dead?
@@ -44,15 +35,9 @@ class Group < Fightable
 
     def targeted_action(target:)
         self.update_state
-        if target.kind_of? Player
-            @units.each do |unit|
-                unit.targeted_action(target: target)
-            end
-        else
-            @units.each do |unit|
-                enemy_unit = target.get_random_targeted_member
-                unit.targeted_action(target: enemy_unit)
-            end
+
+        @units.each do |unit|
+            unit.targeted_action(target: target)
         end
     end
 
@@ -63,10 +48,3 @@ class Group < Fightable
     end
 end
 
-class VillainGroup < Group
-    def update_state()
-        if !self.is_dead?
-            @units.delete_if { |unit| unit.is_dead? || unit.has_fled? }
-        end
-    end
-end

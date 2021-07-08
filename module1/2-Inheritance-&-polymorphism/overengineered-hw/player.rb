@@ -30,7 +30,7 @@ class Player < Fightable
             self.hit(target: target)
         else
             enemy_unit = target.get_random_targeted_member
-            if enemy_unit != nil
+            if enemy_unit != nil && !enemy_unit.is_dead?
                 self.hit(target: enemy_unit)
             end
         end
