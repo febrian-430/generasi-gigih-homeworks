@@ -87,7 +87,7 @@ class Playable < Fightable
                 self.heal_prompt()
             end
         else
-            @unit.hit(target: target)
+            @unit.targeted_action(target: target)
         end
     end
 
