@@ -2,6 +2,13 @@ DROP DATABASE food_oms;
 CREATE DATABASE food_oms;
 USE food_oms;
 
+DROP TABLE IF EXISTS items;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS item_categories;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS order_details;
+
 CREATE TABLE items(
 	id int auto_increment primary key,
     name varchar(50) not null,
@@ -11,7 +18,7 @@ CREATE TABLE items(
 
 CREATE TABLE categories(
 	id int auto_increment primary key,
-    name varchar(50) not null
+    name varchar(50) not null unique
 );
 
 CREATE TABLE item_categories(
@@ -66,7 +73,8 @@ CREATE TABLE order_details(
 	order_id int references orders(id),
     item_id int references items(id),
     qty int not null,
-    primary key(order_id, item_id)
+    primary key(order_id, item_id),
+    constraint qty_only_positive check(qty >= 0)
 );
 
 INSERT INTO users(name, phone_number) values
@@ -89,3 +97,10 @@ INSERT INTO order_details(order_id, item_id, qty) values
 (3, 7, 1), (3, 8, 1),
 (4, 1, 3), (4, 3, 1), (4, 7, 1),
 (5, 3, 2), (5, 5, 1), (5, 6, 1);
+
+SELECT o.id, o.order_date, c.name, c.phone_number, o.type as 'order type' , SUM(od.qty * i.price) AS Total, GROUP_CONCAT(CONCAT(od.qty, 'x ', i.name) SEPARATOR ', ') AS Orders
+FROM orders o 
+JOIN users c ON o.user_id = c.id
+JOIN order_details od ON od.order_id = o.id
+JOIN items i ON i.id = od.item_id
+GROUP BY o.id
