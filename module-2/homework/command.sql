@@ -25,8 +25,8 @@ CREATE TABLE item_categories(
 	item_id int not null,
     category_id int not null,
     primary key(item_id, category_id),
-    foreign key(item_id) references items(id),
-    foreign key(category_id) references categories(id)
+    foreign key(item_id) references items(id) on delete cascade,
+    foreign key(category_id) references categories(id) on delete cascade
 );
 
 INSERT INTO items(name, price) values
