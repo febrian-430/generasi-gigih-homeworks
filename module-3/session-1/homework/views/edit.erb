@@ -1,0 +1,14 @@
+<h1>Edit item</h1>
+
+<form method="POST" action="/items/<%= item.id %>/update">
+    <input name="name" placeholder="item name" value="<%= item.name%>">
+    <input name="price" type="number" placeholder="price" value=<%= item.price %>>
+    <select id="category" name="category">
+        <option value="uncategorized" selected hidden>uncategorized</option>
+        <% categories.each do |category| %>
+            <option value=<%= category.id %> <%= "selected" if item.category && category.id == item.category.id %>> <%= category.name %> </option>  
+        <% end %>
+    </select>
+
+    <input type="submit" value="Update">
+</form>

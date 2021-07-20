@@ -1,0 +1,10 @@
+<div>
+    <p>ID: <%= item.id %></p>
+    <p>Name: <%= item.name %></p>
+    <p>Price: <%= item.price %></p>
+    <p>Category: <%= item.category ? item.category.name : "uncategorized" %></p>
+    <a href="/items/<%= item.id %>/edit">Edit</a>
+    <form action="/items/<%= item.id %>/delete" method="post">
+        <input type="submit" value="Delete" />
+    </form>
+</div>
