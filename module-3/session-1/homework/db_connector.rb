@@ -99,6 +99,7 @@ def update_item(item)
         categoryStatement = "UPDATE item_categories SET category_id = #{item.category.id} WHERE item_id = #{item.id};"
     end
     
+    begin
         client.query("START TRANSACTION;")
         client.query("
             UPDATE items 
@@ -109,6 +110,11 @@ def update_item(item)
         client.query(categoryStatement)
         client.query("COMMIT;")
         return true
+    rescue
+        client.query("ROLLBACK;")
+        return false
+    end
+
     
 end
 
