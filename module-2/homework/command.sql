@@ -64,14 +64,14 @@ CREATE TABLE users(
 
 CREATE TABLE orders(
 	id int auto_increment primary key,
-    user_id int references users(id),
+    user_id int references users(id) on delete cascade,
     order_date timestamp default current_timestamp,
     type enum('dine in', 'takeaway', 'delivery') not null
 );
 
 CREATE TABLE order_details(
-	order_id int references orders(id),
-    item_id int references items(id),
+	order_id int references orders(id) on delete cascade,
+    item_id int references items(id) on delete cascade,
     qty int not null,
     primary key(order_id, item_id),
     constraint qty_only_positive check(qty >= 0)
