@@ -2,13 +2,13 @@ require './db/mysql_connector.rb'
 
 
 class Item
-    attr_accessor :name, :price, :id, :category
+    attr_accessor :name, :price, :id, :categories
 
     def initialize(id, name, price)
         @id = id
         @name = name
         @price = price
-        @categories = categories
+        @categories = Array.new
     end
 
     def self.bind_to_items(raw)
@@ -53,25 +53,36 @@ class Item
     def self.get_item_by_id(id)
         client = create_db_client
         raw = client.query("
-            select i.id, i.name, i.price, c.id as category_id, c.name as 'category_name'
-            from items i
-            left join item_categories ic on ic.item_id = i.id
-            left join categories c on ic.category_id = c.id
-            where i.id = #{id}
+            select id, name, price
+            from items
+            where id = #{id}
         ")
         items = bind_to_items(raw)
+        
         if items.length > 0
             item = items[0] 
             raw = client.query("
-                    select * from categories c join item_categories ic on ic.category_id = c.id where ic.item_id = #{item.id}
+                    select c.id, c.name from categories c 
+                    join item_categories ic on ic.category_id = c.id 
+                    where ic.item_id = #{item.id}
                 ")
-            raw.each do |row|
-                item.categories << Category.new(row["id"], row["name"])
-            end
+            item.categories = Category.bind_to_categories(raw)
             return item
         else
             return nil
         end
+    end
+
+    def self.filter_by_category(category_name)
+        client = create_db_client
+        raw = client.query("
+            select i.* from items i
+            join item_categories ic on ic.item_id = i.id 
+            join categories c on c.id = ic.category_id
+            where c.name = '#{category_name}'
+        ")  
+        items = bind_to_items(raw)
+        return items
     end
     
     def save?

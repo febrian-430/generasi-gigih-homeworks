@@ -15,7 +15,7 @@ class Category
         raw.each do | data |
             categories << Category.new(data["id"], data["name"])
         end
-        return categories
+        categories
     end
 
     def self.all

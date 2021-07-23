@@ -5,7 +5,11 @@
     <tbody>
         <% categories.each do |category| %>
             <tr>
-                <td><%= category.name %></td>
+                <td>
+                    <a href="/items?category=<%= category.name %>"> 
+                        <%= "#{category.name}" %>
+                    </a>
+                </td>
             <tr>
         <% end %>
     </tbody>

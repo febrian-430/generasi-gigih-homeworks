@@ -10,12 +10,15 @@ class CategoryController
     end
 
     def self.create_category(param)
-        true if Category.new(nil, param["name"]).save
-        false
+        Category.new(nil, param["name"]).save
     end
 
     def self.all_categories
+        puts "here"
         categories = Category.all
-        categories
+        renderer = ERB.new(File.read('./views/category_index.erb'))
+        renderer.result(binding)
     end
+
+    
 end

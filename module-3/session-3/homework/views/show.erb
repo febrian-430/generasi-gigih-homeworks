@@ -6,7 +6,9 @@
     <p>Price: <%= item.price %></p>
     <p>Category: 
     <% item.categories.each do |category| %>
-        <%= category %>
+        <a href="/items?category=<%= category.name %>"> 
+            <%= "#{category.name}, " %>
+        </a>
     <% end %>
     </p>
     <a href="/items/<%= item.id %>/edit">Edit</a>

@@ -1,14 +1,33 @@
 <%= erb :header%>
 <h1>Edit item</h1>
 <form method="POST" action="/items/<%= item.id %>/update">
-    <input name="name" placeholder="item name" value="<%= item.name%>">
-    <input name="price" type="number" placeholder="price" value=<%= item.price %>>
-    <select id="category" name="category">
-        <option value="uncategorized" selected hidden>uncategorized</option>
-        <% categories.each do |category| %>
-            <option value=<%= category.id %> <%= "selected" if item.category && category.id == item.category.id %>> <%= category.name %> </option>  
-        <% end %>
-    </select>
+    <input name="name" placeholder="item name" value="<%= item.name%>"><br>
+    <input name="price" type="number" placeholder="price" value=<%= item.price %>><br>
+    <div>
+        Categories: 
+        <ul>
+            <% item.categories.each do |category| %>
+                <li>
+                    <form action="/items/<%= item.id %>/unlink" method="POST">
+                        <p><%= category.name %></p>
+                        <input type="hidden" value="<%= category.id %>" />
+                        <input type="submit" value="[x]" />
+                    </form>
+                </li>
+            <% end %>
+        <ul>
+    </div>
+    <div>
+        Add to category
+        <select name="new_category">
+            <% categories.each do |category| %>
+                <option value="<%=category.id %>"><%= category.name %></option>
+            <% end %>
+        </select>
+    </div>
+
+
+
 
     <input type="submit" value="Update">
 </form>

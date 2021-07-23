@@ -4,16 +4,20 @@ require './models/item.rb'
 require './models/category.rb'
 require './controllers/item_controller.rb'
 require './controllers/category_controller.rb'
-
-
 require './db/mysql_connector'
+require 'dotenv'
 
+Dotenv.load
 
 get '/' do
     items = Item.get_all_items
     erb :index, locals: {
         items: items
     }
+end
+
+get '/items' do
+    ItemController.items(params)
 end
 
 get "/items/new" do
@@ -80,18 +84,15 @@ post '/items/:id/delete' do
 end 
 
 get '/categories' do
-    categories = CategoryController.all_categories
-    erb :category_index, locals: {
-        categories: categories
-    }
+    CategoryController.all_categories
+end
+
+post '/categories' do
+    redirect('/categories') if CategoryController.create_category(params)
 end
 
 get '/categories/create' do
     CategoryController.category_form
-end
-
-post '/categories' do
-    redirect('/categories') if CategoryController.create_category(params) == true
 end
 
 
