@@ -1,10 +1,16 @@
 require 'sinatra'
-# require 'sinatra/reloader'
+require 'sinatra/reloader'
+require './models/item.rb'
+require './models/category.rb'
+require './controllers/item_controller.rb'
+require './controllers/category_controller.rb'
 
-require './db_connector'
+
+require './db/mysql_connector'
+
 
 get '/' do
-    items = get_all_items
+    items = Item.get_all_items
     erb :index, locals: {
         items: items
     }
@@ -15,19 +21,13 @@ get "/items/new" do
 end
 
 post '/items' do
-    name = params["name"]
-    price = params["price"]
-
-    create_new_item(name, price)
-
-    redirect('/')
+    return redirect('/') if ItemController.create_item(params)
 end
 
-#TODO
-#SHOW WITH CATEGORY
+
 get '/items/:id' do
     id = params["id"].to_i
-    item = get_item_by_id(id)
+    item = Item.get_item_by_id(id)
     if !item 
         return status 404
     else
@@ -40,11 +40,11 @@ end
 
 get '/items/:id/edit' do
     id = params["id"].to_i
-    item = get_item_by_id(id)
+    item = Item.get_item_by_id(id)
     if !item 
         return status 404
     else
-        categories = get_all_categories
+        categories = Category.all
         erb :edit, locals: {
             item: item,
             categories: categories
@@ -54,14 +54,14 @@ end
 
 post '/items/:id/update' do
     id = params["id"].to_i
-    item = get_item_by_id(id)
+    item = Item.get_item_by_id(id)
     if !item 
         return status 404
     else
         item.name = params["name"]
         item.price = params["price"].to_i
         item.category = Category.new(params["category"], nil)
-        success = update_item(item)
+        success = item.update
         if success 
             puts "update success"
         else
@@ -75,9 +75,26 @@ end
 
 post '/items/:id/delete' do
     id = params["id"].to_i
-    delete_item_by_id(id)
+    Item.new(id, "", "").delete
     redirect('/')
 end 
+
+get '/categories' do
+    categories = CategoryController.all_categories
+    erb :category_index, locals: {
+        categories: categories
+    }
+end
+
+get '/categories/create' do
+    CategoryController.category_form
+end
+
+post '/categories' do
+    redirect('/categories') if CategoryController.create_category(params) == true
+end
+
+
 
 not_found do
     erb :not_found
