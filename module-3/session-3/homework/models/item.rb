@@ -193,5 +193,6 @@ class Item
         return false unless delete?
         client = MySQLDB.get_client
         client.query("DELETE FROM items WHERE id = #{@id}")
+        return true
     end
 end

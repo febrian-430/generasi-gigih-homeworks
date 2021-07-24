@@ -10,10 +10,7 @@ require 'dotenv'
 Dotenv.load
 
 get '/' do
-    items = Item.get_all_items
-    erb :index, locals: {
-        items: items
-    }
+    ItemController.index
 end
 
 get '/commit' do
@@ -30,35 +27,16 @@ end
 
 post '/items' do
     redirect('/') if ItemController.create_item(params)
-    p "FK U BITCH"
 end
 
 
 get '/items/:id' do
-    id = params["id"].to_i
-    item = Item.get_item_by_id(id)
-    if !item 
-        return status 404
-    else
-        erb :show, locals: {
-            item: item
-        }
-    end
+    ItemController.show(params)
 end
 
 
 get '/items/:id/edit' do
-    id = params["id"].to_i
-    item = Item.get_item_by_id(id)
-    if !item 
-        return status 404
-    else
-        categories = Category.all
-        erb :edit, locals: {
-            item: item,
-            categories: categories
-        }
-    end
+    ItemController.edit_form(params)
 end
 
 post '/items/:id/update' do
@@ -68,9 +46,7 @@ end
 #DELETE DAN SHOW
 
 post '/items/:id/delete' do
-    id = params["id"].to_i
-    Item.new(id, "", "").delete
-    redirect('/')
+    redirect('/items') if ItemController.delete(params)
 end 
 
 get '/categories' do

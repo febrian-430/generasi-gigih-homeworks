@@ -45,11 +45,9 @@ class MySQLDB
         get_client
         @@client.query("START TRANSACTION;")
         @@client.query(
-            "select i.* from items i
-            join item_categories ic on ic.item_id = i.id 
-            join categories c on c.id = ic.category_id"
+            "select sleep(2)"
         )
-        sleep(0.2)
+        sleep(3)
         @@client.query("COMMIT;")
     end
 end
