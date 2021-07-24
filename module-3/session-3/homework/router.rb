@@ -16,16 +16,21 @@ get '/' do
     }
 end
 
+get '/commit' do
+    MySQLDB.commit
+end
+
 get '/items' do
     ItemController.items(params)
 end
 
 get "/items/new" do
-    erb :create
+    ItemController.create_form
 end
 
 post '/items' do
-    return redirect('/') if ItemController.create_item(params)
+    redirect('/') if ItemController.create_item(params)
+    p "FK U BITCH"
 end
 
 

@@ -4,11 +4,18 @@ require './models/category.rb'
 
 class ItemController
 
+    def self.create_form
+        categories = Category.all
+        ERB.new(File.read("./views/create.erb")).result(binding)
+    end
+
     def self.create_item(params)
         item = Item.new(nil,
             params["name"],
             params["price"]
         )
+        item.categories = params["categories"].map{ |category_id| Category.new(category_id, nil)} if params["categories"]
+
         return item.save
     end
 

@@ -22,14 +22,14 @@ class Item
     
     
     def self.get_all_items
-        client = create_db_client
+        client = MySQLDB.get_client
         raw = client.query("select * from items")
         items = bind_to_items(raw)
         return items
     end
     
     def self.get_all_items_with_categories
-        client = create_db_client
+        client = MySQLDB.get_client
         raw = client.query(
             "select i.*, c.id as category_id, c.name as category_name
              from items i 
@@ -41,7 +41,7 @@ class Item
     end
     
     def self.get_items_with_price_below(price)
-        client = create_db_client
+        client = MySQLDB.get_client
         raw = client.query(
             "select * from items
             where price < #{price}"
@@ -51,7 +51,7 @@ class Item
     end
     
     def self.get_item_by_id(id)
-        client = create_db_client
+        client = MySQLDB.get_client
         raw = client.query("
             select id, name, price
             from items
@@ -76,7 +76,7 @@ class Item
     end
 
     def self.filter_by_category(category_name)
-        client = create_db_client
+        client = MySQLDB.get_client
         raw = client.query("
             select i.* from items i
             join item_categories ic on ic.item_id = i.id 
@@ -85,6 +85,14 @@ class Item
         ")  
         items = bind_to_items(raw)
         return items
+    end
+
+    def self.last
+        client = MySQLDB.get_client
+        raw = client.query("
+            select * from items order by id desc limit 1
+        ")
+        return bind_to_items(raw)[0]
     end
     
     def save?
@@ -95,9 +103,22 @@ class Item
 
     def save
         return false unless save?
-        client = create_db_client
-        client.query("INSERT INTO items(name, price) VALUES('#{@name}', #{@price})")
-        true
+        client = MySQLDB.get_client
+        success = MySQLDB.transaction {
+            result = client.query("INSERT INTO items(name, price) VALUES('#{@name}', #{@price});")
+            @id = client.last_id
+            insert_category_statement = nil
+            if !@categories.empty?
+                bulk = []
+                @categories.each do |category|
+                    bulk << "(%s, %d)" % [@id, category.id]
+                end
+                insert_category_statement = "INSERT INTO item_categories(item_id, category_id) VALUES %s;" % bulk.join(",")
+            end
+            puts insert_category_statement.inspect
+            client.query(insert_category_statement)
+        }
+        success
     end
 
     def unlink_category
@@ -112,11 +133,11 @@ class Item
 
     def update
         return false unless update?
-        client = create_db_client
+        client = MySQLDB.get_client
         
         current_category_ids = Category.of_item(self.id).map{ |category| category.id }
         updated_categories = self.categories&.map{ |category| category.id }
-        
+
         new_categories = []
         deleted_categories = []
         if updated_categories
@@ -170,7 +191,7 @@ class Item
 
     def delete
         return false unless delete?
-        client = create_db_client
+        client = MySQLDB.get_client
         client.query("DELETE FROM items WHERE id = #{@id}")
     end
 end
