@@ -57,22 +57,7 @@ get '/items/:id/edit' do
 end
 
 post '/items/:id/update' do
-    id = params["id"].to_i
-    item = Item.get_item_by_id(id)
-    if !item 
-        return status 404
-    else
-        item.name = params["name"]
-        item.price = params["price"].to_i
-        item.category = Category.new(params["category"], nil)
-        success = item.update
-        if success 
-            puts "update success"
-        else
-            puts "update failed"
-        end
-        redirect("/items/#{item.id}")
-    end
+    redirect("/items/#{params[:id]}") if ItemController.update(params)
 end
 
 #DELETE DAN SHOW
@@ -92,7 +77,20 @@ post '/categories' do
 end
 
 get '/categories/create' do
-    CategoryController.category_form
+    CategoryController.create_form
+end
+
+get '/categories/:id/edit' do
+    CategoryController.edit_form(params)
+end
+
+post '/categories/:id/update' do
+    redirect('/categories') if CategoryController.update(params)
+    redirect("/categories/#{params["id"].to_i}/edit")
+end
+
+post '/categories/:id/delete' do
+    redirect('/categories') if CategoryController.delete(params)
 end
 
 

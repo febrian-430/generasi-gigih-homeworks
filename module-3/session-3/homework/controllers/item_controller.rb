@@ -4,10 +4,10 @@ require './models/category.rb'
 
 class ItemController
 
-    def self.create_item(param)
+    def self.create_item(params)
         item = Item.new(nil,
-            param["name"],
-            param["price"]
+            params["name"],
+            params["price"]
         )
         return item.save
     end
@@ -23,4 +23,21 @@ class ItemController
         renderer.result(binding)
     end
 
+    def self.update(params)
+        id = params["id"].to_i
+        item = Item.get_item_by_id(id)
+        if !item 
+            return false
+        else
+            item.name = params["name"]
+            item.price = params["price"].to_i
+            
+            item.categories = params["categories"] ? 
+                params["categories"].map{|category| Category.new(category.to_i, nil) } 
+                :
+                []
+            
+            item.update
+        end
+    end
 end

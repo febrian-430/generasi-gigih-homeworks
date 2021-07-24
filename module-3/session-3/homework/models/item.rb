@@ -8,7 +8,7 @@ class Item
         @id = id
         @name = name
         @price = price
-        @categories = Array.new
+        @categories = []
     end
 
     def self.bind_to_items(raw)
@@ -66,6 +66,8 @@ class Item
                     join item_categories ic on ic.category_id = c.id 
                     where ic.item_id = #{item.id}
                 ")
+            
+
             item.categories = Category.bind_to_categories(raw)
             return item
         else
@@ -97,30 +99,52 @@ class Item
         client.query("INSERT INTO items(name, price) VALUES('#{@name}', #{@price})")
         true
     end
+
+    def unlink_category
+    end
     
     def update?
         return false if @id.nil?
         return false if @name.nil?
         return false if @price.nil?
-        return false if @category.nil?
         true
     end
 
     def update
         return false unless update?
         client = create_db_client
-        result = client.query("
-            SELECT 1 FROM item_categories
-            WHERE item_id = #{@id}
-        ")
-    
-        categoryStatement = "INSERT INTO item_categories(item_id, category_id) VALUES (#{@id}, #{@category.id});"
         
-        #if item already has a category
-        if result.each.length > 0
-            categoryStatement = "UPDATE item_categories SET category_id = #{@category.id} WHERE item_id = #{@id};"
+        current_category_ids = Category.of_item(self.id).map{ |category| category.id }
+        updated_categories = self.categories&.map{ |category| category.id }
+        
+        new_categories = []
+        deleted_categories = []
+        if updated_categories
+            #get new categories id that is not in current category
+            new_categories = updated_categories - current_category_ids
+
+            #get the category id to delete from current category
+            deleted_categories = current_category_ids - current_category_ids.intersection(updated_categories)
         end
-        
+
+        puts "new: #{new_categories.inspect}"
+        puts "deleted: #{deleted_categories.inspect}"
+        create_statement = nil
+        if new_categories&.length > 0
+            bulk_insert = []
+            new_categories.each do |category_id|
+                bulk_insert << "(#{self.id}, #{category_id})"
+            end
+            #delete the last comma and change it into semicolon
+            create_statement = "INSERT INTO item_categories(item_id, category_id) VALUES %s;" % bulk_insert.join(",")
+            puts create_statement.inspect
+        end
+
+        delete_statement = nil
+        if deleted_categories&.length > 0
+            delete_statement = "DELETE FROM item_categories WHERE item_id = #{self.id} AND category_id IN(%s);" % deleted_categories.join(",")
+            puts delete_statement.inspect
+        end
         begin
             client.query("START TRANSACTION;")
             client.query("
@@ -129,7 +153,8 @@ class Item
                     price = #{@price}
                 WHERE id = #{@id};
             ")
-            client.query(categoryStatement)
+            client.query(create_statement) if !create_statement.nil?
+            client.query(delete_statement) if !delete_statement.nil?
             client.query("COMMIT;")
             return true
         rescue
