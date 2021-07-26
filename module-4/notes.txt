@@ -1,0 +1,21 @@
+unit test:
+kode yang terisolasi
+karena tiap rilis fitur, harus verifikasi fitur baru dan fitur-fitur sebelumnya juga
+
+integration test:
+test keseluruhan program
+
+tdd cycle: (RED, GREEN, REFACTOR)
+write failing test: buat test tanpa implement code
+make the test pass: implement code 
+refactor: refactoring the code
+
+FIRST Principle
+fast: write fast test | kalo lama, buat apa? lebih baik manual
+independent/isolated: write test that shudnt depend on other test cases (mocking)
+repeatable: write test that run multiple times in any envi and still produce same res
+self-validating: write test that have no manual validation need after running test
+    contoh klo panggil method yg panggil delete model ke db, ga usah cek manual
+timely and thorough: 
+    timely: write test before implement the code
+    thorough: write test for many cases, where we can trust the unit test to verify the implementation thoroughly
