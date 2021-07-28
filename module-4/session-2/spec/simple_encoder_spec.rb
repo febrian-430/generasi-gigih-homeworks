@@ -1,3 +1,5 @@
+require_relative './test_helper'
+
 require_relative './simple_encoder'
 
 describe SimpleEncoder do

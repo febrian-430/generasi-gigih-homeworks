@@ -18,8 +18,6 @@ class SimpleEncoder
     def encode_char(character)
         if VOWEL_CHARS.include? character
             return encode_vowel_char(character)
-        elsif character == ''
-            return ''
         else
             return encode_consonant_char(character)
         end
