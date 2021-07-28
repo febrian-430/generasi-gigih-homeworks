@@ -1,0 +1,9 @@
+rules
+1. write prod code to pass a failing unit test
+2. write no more of a unit test than sufficient to fail:
+	make atomic test
+3. write no more prod code than necessary to pass the one failing test
+
+Ideal git commit for tdd: clean, explanatory, atomic.
+1 commit after test is green
+1 commit after refactor and green
