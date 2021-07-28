@@ -19,4 +19,16 @@ describe SimpleEncoder do
         encoded = encoder.encode('z')
         expect(encoded).to eq('i')
     end
+
+    it 'should encode u to p' do
+        encoder = SimpleEncoder.new
+        encoded = encoder.encode('u')
+        expect(encoded).to eq('p')
+    end
+
+    it 'should encode homework to qjvzfjat' do
+        encoder = SimpleEncoder.new
+        encoded = encoder.encode('homework')
+        expect(encoded).to eq("qjvzfjat")
+    end
 end
