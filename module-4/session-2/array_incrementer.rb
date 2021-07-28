@@ -5,12 +5,6 @@ class ArrayIncrementer
 
     def increment
         @nums.reverse!
-        self.iter_increment
-        @nums.reverse!
-        return @nums
-    end
-
-    def iter_increment
         last = -1
         carry = false
         @nums.each_with_index do |num, i|
@@ -30,5 +24,8 @@ class ArrayIncrementer
         if last == 9 && carry == true
             @nums << 1
         end
+        @nums.reverse!
+        return @nums
     end
+
 end
