@@ -7,3 +7,5 @@ rules (write code seeffisien mungkin)
 Ideal git commit for tdd: clean, explanatory, atomic.
 1 commit after test is green
 1 commit after refactor and green
+
+code coverage

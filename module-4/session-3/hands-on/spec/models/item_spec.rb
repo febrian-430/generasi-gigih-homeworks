@@ -1,4 +1,5 @@
 require 'rspec'
+require 'mysql2'
 require './models/item'
 require './db/mysql_connector'
 
@@ -26,10 +27,13 @@ describe Item do
         before(:each) do
             client.query("DELETE FROM items")
         end
-        context 'given a valid Item instance' do
+        context 'given an item instance with saveable attribute values' do
             it 'should return true and the data is inserted' do
                 item = Item.new(nil, "item 1", 123)
-                
+
+                dummy_client = double
+                allow(MySQLDB).to receive(:get_client).and_return(dummy_client)
+                expect(dummy_client).to receive(:query).with("INSERT INTO items(name, price) VALUES ('#{item.name}', #{item.price});")
                 successful = item.save
                 
                 result = client.query("SELECT * FROM items LIMIT 1")

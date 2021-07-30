@@ -105,7 +105,7 @@ class Item
         return false unless self.save?
         client = MySQLDB.get_client
         success = MySQLDB.transaction {
-            result = client.query("INSERT INTO items(name, price) VALUES('#{@name}', #{@price});")
+            result = client.query("INSERT INTO items(name, price) VALUES ('#{@name}', #{@price});")
             @id = client.last_id
             insert_category_statement = nil
             if !@categories.empty?
