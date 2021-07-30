@@ -21,7 +21,6 @@ class MySQLDB
                 :database => ENV["DB_NAME"]
             )
         end
-        puts "I am singleton here's the proof: #{@@client.inspect}" 
         @@client
     end
 
