@@ -1,0 +1,10 @@
+<div>
+    <a href="/items">Items</a>
+    <a href="/categories">Categories</a>
+</div>
+
+<h1>Edit category</h1>
+<form method="POST" action="/categories/<%= category.id %>/update">
+    <input name="name" placeholder="category name" value="<%= category.name %>"><br>
+    <input type="submit" value="Update">
+</form>

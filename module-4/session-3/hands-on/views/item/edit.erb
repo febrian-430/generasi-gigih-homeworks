@@ -1,0 +1,17 @@
+<div>
+    <a href="/items">Items</a>
+    <a href="/categories">Categories</a>
+</div>
+
+<h1>Edit item</h1>
+<form method="POST" action="/items/<%= item.id %>/update">
+    <input name="name" placeholder="item name" value="<%= item.name%>"><br>
+    <input name="price" type="number" placeholder="price" value=<%= item.price %>><br>
+    <% categories.each do |category| %>
+        <input type="checkbox" name="categories[]" value="<%= category.id %>" 
+            <%= "checked" if item.categories.any?{|item_category| item_category.id == category.id} %>>
+                <%= category.name %>
+            <br>
+    <% end %>
+    <input type="submit" value="Update">
+</form>
