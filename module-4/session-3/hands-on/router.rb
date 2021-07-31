@@ -27,6 +27,7 @@ end
 
 post '/items' do
     redirect('/') if ItemController.create_item(params)
+    redirect('items/new')
 end
 
 
