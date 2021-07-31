@@ -32,12 +32,12 @@ class Category
 
     def self.of_item(item_id)
         client = MySQLDB.get_client
-        raw = client.query("
-            select c.id, c.name 
+        raw = client.query(
+           "select c.id, c.name 
             from categories c
             join item_categories ic on ic.category_id = c.id
-            where ic.item_id = #{item_id} 
-        ")
+            where ic.item_id = #{item_id}"
+        )
         return bind_to_categories(raw)
     end
 
@@ -47,7 +47,7 @@ class Category
     end
 
     def save
-        return false if !self.save?
+        return false unless self.save?
         client = MySQLDB.get_client
         client.query("insert into categories(name) values ('#{@name}')")
         true
@@ -60,7 +60,7 @@ class Category
     end
 
     def update
-        return false if !self.update?
+        return false unless self.update?
         client = MySQLDB.get_client
         client.query("update categories set name = '#{@name}' where id = #{@id}")
         true
