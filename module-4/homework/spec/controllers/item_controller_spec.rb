@@ -4,7 +4,6 @@ require './controllers/item_controller'
 require './db/mysql_connector'
 
 describe ItemController do
-    let(:client) { MySQLDB.get_client }
  
     before(:each) do
         @items = [Item.new(1, "123", 456), Item.new(2, "def", 12312)]
