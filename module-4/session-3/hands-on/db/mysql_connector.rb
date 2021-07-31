@@ -30,8 +30,7 @@ class MySQLDB
         raise false unless block_given?
         begin
             @@client.query("START TRANSACTION;")
-            yield
-            # @@client.query("COMMIT;")
+            yield(@@client)
             @@client.query("COMMIT;")
             return true
         rescue => ex
