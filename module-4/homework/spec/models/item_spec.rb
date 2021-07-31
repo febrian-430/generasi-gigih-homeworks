@@ -184,33 +184,58 @@ describe Item do
     end
     describe 'data manipulation' do
         describe '#save' do
-            # let(:client){ MySQLDB.get_client }
-            # before(:each) do
-            #     client.query("DELETE FROM items")
-            # end
             context 'given an item instance with saveable attribute values' do
                 it 'should return true and the data is inserted' do
                     item = Item.new(nil, "item 1", 123)
 
-                    dummy_client = double
-
                     allow(MySQLDB).to receive(:transaction).and_return(true)
 
+                    expect(MySQLDB).to receive(:transaction)
                     successful = item.save
                     expect(successful).to eq(true)
                     
-                    # result = client.query("SELECT * FROM items LIMIT 1")
-                    # fetched_item = Item.new(nil, nil, nil)
+                end
+            end
 
-                    # result.each do |row|
-                    #     puts row.inspect
-                    #     fetched_item.id = row["id"].to_i
-                    #     fetched_item.name = row["name"]
-                    #     fetched_item.price = row["price"].to_i
-                    # end
-                    # expect(successful).to eq(true)
-                    # expect(fetched_item.name).to eq(item.name)
-                    # expect(fetched_item.price).to eq(item.price)
+            context 'given instance that doesnt pass the validation' do
+                it 'should return false' do
+                    item = Item.new(nil, "", nil)
+                    allow(item).to receive(:save?).and_return(false)
+
+                    expect(item).to receive(:save?)
+                    expect(MySQLDB).not_to receive(:transaction)
+                    successful = item.save
+                    expect(successful).to eq(false)
+                end
+            end
+        end
+
+        describe '#update' do
+            context 'given an item instance with saveable attribute values' do
+                it 'should return true and the data is inserted' do
+                    item = Item.new(1, "item 2", 123)
+
+                    allow(MySQLDB).to receive(:transaction).and_return(true)
+                    allow(Category).to receive(:of_item).and_return([])
+
+                    expect(MySQLDB).to receive(:transaction)
+                    successful = item.update
+                    expect(successful).to eq(true)
+                    
+                end
+            end
+
+            context 'given instance that doesnt pass the validation' do
+                it 'should return false' do
+                    item = Item.new(1, "", nil)
+                    allow(item).to receive(:update?).and_return(false)
+
+                    expect(item).to receive(:update?)
+                    expect(Category).not_to receive(:of_item)
+                    expect(MySQLDB).not_to receive(:transaction)
+
+                    successful = item.update
+                    expect(successful).to eq(false)
                 end
             end
         end

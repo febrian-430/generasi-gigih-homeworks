@@ -39,14 +39,4 @@ class MySQLDB
             return false
         end
     end
-
-    def self.commit
-        get_client
-        @@client.query("START TRANSACTION;")
-        @@client.query(
-            "select sleep(2)"
-        )
-        sleep(3)
-        @@client.query("COMMIT;")
-    end
 end

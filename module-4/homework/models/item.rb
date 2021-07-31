@@ -99,7 +99,6 @@ class Item
             end
             client.query(insert_category_statement) unless !insert_category_statement
         end
-        puts "save is #{success}"
         return success
     end
     
