@@ -21,7 +21,46 @@ describe ItemController do
         end
     end
 
-    
+    describe '#create_item' do
+        context 'given parameter with empty name' do
+            it 'should return false and not save the data' do
+                params = {
+                    "name" => nil,
+                    "price" => 123
+                    # "categories" => [1,2]
+                }
+
+                fake_item = double
+                allow(Item).to receive(:new).and_return(fake_item)
+                # allow(fake_item).to receive(:save?).and_return(false)
+                allow(fake_item).to receive(:save).and_return(false)
+
+                # categories = params["categories"].map{ |category_id| Category.new(category_id, nil)}
+
+                # expect(fake_item).to receive(:categories=).with(categories)
+                # expect(fake_item).to receive(:save?)
+                expect(fake_item).to receive(:save)
+                expect(ItemController.create_item(params)).to eq(false)
+            end 
+        end
+
+        context 'given parameter with valid name and price' do
+            it 'should return false and not save the data' do
+                params = {
+                    "name" => "yes",
+                    "price" => 123
+                    # "categories" => [1,2]
+                }
+
+                fake_item = double
+                allow(Item).to receive(:new).and_return(fake_item)
+                allow(fake_item).to receive(:save).and_return(true)
+
+                expect(fake_item).to receive(:save)
+                expect(ItemController.create_item(params)).to eq(true)
+            end 
+        end
+    end
 
     describe '#index' do
         it 'renders index form' do
