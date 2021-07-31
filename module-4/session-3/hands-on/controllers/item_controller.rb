@@ -49,7 +49,7 @@ class ItemController
                 :
                 []
             
-            item.update
+            return item.update
         end
     end
 

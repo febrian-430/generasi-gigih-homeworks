@@ -60,7 +60,6 @@ describe ItemController do
     end
 
     describe '#edit_form' do
-        
         context 'given valid id' do
             it 'should give the edit form for the item' do
                 params = {
@@ -112,13 +111,10 @@ describe ItemController do
                 }
                 item = items[0]
 
-                categories = @categories
-
                 allow(Item).to receive(:get_item_by_id).and_return(item)
-                allow(Category).to receive(:all).and_return(categories)
 
-                renderer = ERB.new(File.read("./views/item/edit.erb"))
-                expect(ItemController.edit_form(params)).to eq(renderer.result(binding))
+                renderer = ERB.new(File.read("./views/item/show.erb"))
+                expect(ItemController.show(params)).to eq(renderer.result(binding))
             end
         end
 
@@ -144,7 +140,6 @@ describe ItemController do
             # client.query("DELETE FROM items")
             # client.query("INSERT INTO items(name, price) VALUES ('#{item_in_db.name}', '#{item_in_db.price}')")
             @item = Item.new(1, "dummy", 1)
-
         end
         
         context 'given an invalid item id' do
@@ -164,29 +159,32 @@ describe ItemController do
         context 'given a valid id with empty name and price' do
             it 'should return false' do
                 params = {
-                    "id" => 99,
+                    "id" => 1,
                     "name" => "",
                     "price" => nil
                 }
 
                 fake_item = double
-                allow(Item).to receive(:new).and_return(fake_item)
+                allow(Item).to receive(:get_item_by_id).and_return(fake_item)
                 
-                allow(Item).to receive(:get_item_by_id).and_return(nil)
+                expect(fake_item).not_to receive(:update)
+                expect(fake_item.update).to eq(true)
 
                 expect(ItemController.update(params)).to eq(false)
             end
         end
 
-        # context 'given a valid id with valid name and price with no categories' do
-        #     it 'should return true and updates the data' do
-        #         params = {
-        #             "id" => 1,
-        #             "name" => "updated",
-        #             "price" => 999
-        #         }
-        #         expect(ItemController.update(params)).to eq(false)
-        #     end
-        # end
+        context 'given a valid id with valid name and price with no categories' do
+            it 'should return true and updates the data' do
+                params = {
+                    "id" => 1,
+                    "name" => "updated",
+                    "price" => 999,
+                    "categories" => [1,2,3]
+                }
+
+                expect(ItemController.update(params)).to eq(false)
+            end
+        end
     end
 end

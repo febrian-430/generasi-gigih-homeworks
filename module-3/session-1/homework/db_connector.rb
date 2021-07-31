@@ -78,7 +78,7 @@ def get_item_by_id(id)
     ")
     items = bind_to_items(raw)
     return items[0]
-end
+end54
 
 def create_new_item(name, price)
     client = create_db_client

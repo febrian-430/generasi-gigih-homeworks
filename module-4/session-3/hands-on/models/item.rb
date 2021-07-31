@@ -155,6 +155,7 @@ class Item
             client.query(create_statement) if !create_statement.nil?
             client.query(delete_statement) if !delete_statement.nil?
         end
+        return success
     end
     
     def delete?
