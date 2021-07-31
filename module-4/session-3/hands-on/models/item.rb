@@ -103,8 +103,8 @@ class Item
 
     def save
         return false unless self.save?
-        client = MySQLDB.get_client
-        success = MySQLDB.transaction {
+        # client = MySQLDB.get_client
+        success = MySQLDB.transaction do |client|
             result = client.query("INSERT INTO items(name, price) VALUES ('#{@name}', #{@price});")
             @id = client.last_id
             insert_category_statement = nil
@@ -117,7 +117,8 @@ class Item
             end
             puts @id
             client.query(insert_category_statement) unless !insert_category_statement
-        }
+        end
+        
         return success
     end
 
