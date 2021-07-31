@@ -42,7 +42,7 @@ class Category
     end
 
     def save?
-        false if @name.nil?
+        return false if @name.nil? || @name.empty?
         true
     end
 
@@ -55,7 +55,7 @@ class Category
 
     def update?
         return false if @id.nil?
-        return false if @name.nil?
+        return false if @name.nil? || @name.empty?
         true
     end
 
