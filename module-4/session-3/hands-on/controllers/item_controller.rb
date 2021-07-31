@@ -57,7 +57,7 @@ class ItemController
         id = params["id"].to_i
         item = Item.get_item_by_id(id)
         if !item 
-            return status 404
+            ERB.new(File.read('./views/not_found.erb')).result(binding)
         else
             ERB.new(File.read('./views/item/show.erb')).result(binding)
         end
@@ -65,8 +65,13 @@ class ItemController
 
     def self.edit_form(params)
         item = Item.get_item_by_id(params["id"].to_i)
-        categories = Category.all
-        ERB.new(File.read('./views/item/edit.erb')).result(binding)
+        if !item
+            renderer = ERB.new(File.read("./views/not_found.erb"))
+        else
+            categories = Category.all
+            renderer = ERB.new(File.read("./views/item/edit.erb"))
+        end
+        renderer.result(binding)
     end
 
     def self.delete(params)
