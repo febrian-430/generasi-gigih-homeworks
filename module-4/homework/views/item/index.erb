@@ -1,0 +1,31 @@
+<div>
+    <a href="/items">Items</a>
+    <a href="/categories">Categories</a>
+</div>
+<% if items.length > 0 %>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Price</th>
+        </thead>
+        <tbody>
+            <% items.each do |item| %>
+                <tr>
+                    <td><%= item.name %></td>
+                    <td><%= item.price %></td>
+                    <td><a href="/items/<%= item.id %>">Show</a></td>
+                    <td><a href="/items/<%= item.id %>/edit">Edit</a></td>
+                    <td>
+                        <form method="POST" action="/items/<%= item.id %>/delete" >
+                            <input type="submit" value="Delete"/>
+                        </form>
+                    </td>
+                <tr>
+            <% end %>
+        </tbody>
+    </table>
+<% else %>
+    <p>Empty list</p>
+<% end %>
+
+<a href="/items/new">New Item</a>
