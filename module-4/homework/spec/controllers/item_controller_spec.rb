@@ -21,6 +21,8 @@ describe ItemController do
         end
     end
 
+    
+
     describe '#index' do
         it 'renders index form' do
             items = [Item.new(1, 'a', 123), Item.new(2, 'dada', 421)]
@@ -161,7 +163,7 @@ describe ItemController do
             end
         end
 
-        context 'given a valid id with empty name and price' do
+        context 'given a valid id with empty name and price in the parameter' do
             it 'should return false' do
                 params = {
                     "id" => 99,
@@ -170,23 +172,75 @@ describe ItemController do
                 }
 
                 fake_item = double
-                allow(Item).to receive(:new).and_return(fake_item)
+                allow(Item).to receive(:get_item_by_id).and_return(fake_item)
+                allow(fake_item).to receive(:update).and_return(false)
                 
-                allow(Item).to receive(:get_item_by_id).and_return(nil)
+                expect(fake_item).to receive(:name=).with(params["name"])
+                expect(fake_item).to receive(:price=).with(params["price"].to_i)
+                expect(fake_item).to receive(:categories=).with([])
+
+                expect(fake_item).to receive(:update)
+
 
                 expect(ItemController.update(params)).to eq(false)
             end
         end
 
-        # context 'given a valid id with valid name and price with no categories' do
-        #     it 'should return true and updates the data' do
-        #         params = {
-        #             "id" => 1,
-        #             "name" => "updated",
-        #             "price" => 999
-        #         }
-        #         expect(ItemController.update(params)).to eq(false)
-        #     end
-        # end
+        context 'given a valid id with valid name and price in the parameter' do
+            it 'should return true and updates the data' do
+                params = {
+                    "id" => 1,
+                    "name" => "updated",
+                    "price" => 999
+                }
+                fake_item = double
+                allow(Item).to receive(:get_item_by_id).and_return(fake_item)
+                allow(fake_item).to receive(:update).and_return(true)
+                
+                expect(fake_item).to receive(:name=).with(params["name"])
+                expect(fake_item).to receive(:price=).with(params["price"].to_i)
+                expect(fake_item).to receive(:categories=).with([])
+
+                expect(fake_item).to receive(:update)
+
+
+                expect(ItemController.update(params)).to eq(true)
+            end
+        end
+    end
+
+    describe '#delete' do
+        context 'given no id parameter' do
+            it 'should return false' do
+                params = {}
+
+                expect(ItemController.delete(params)).to eq(false)
+            end
+        end
+
+        context 'given invalid id parameter' do
+            it 'should return false and does not delete the item' do
+                params = {"id"=>12480}
+                fake_item = double
+                allow(Item).to receive(:get_item_by_id).and_return(nil)
+
+                expect(fake_item).not_to receive(:delete)
+
+                expect(ItemController.delete(params)).to eq(false)
+            end
+        end
+
+        context 'given valid id parameter' do
+            it 'should return true and deletes the item' do
+                params = {"id"=>1}
+                fake_item = double
+                allow(Item).to receive(:get_item_by_id).and_return(fake_item)
+                allow(fake_item).to receive(:delete).and_return(true)
+
+                expect(fake_item).to receive(:delete)
+
+                expect(ItemController.delete(params)).to eq(true)
+            end
+        end
     end
 end

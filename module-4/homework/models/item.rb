@@ -155,6 +155,7 @@ class Item
             client.query(create_statement) if !create_statement.nil?
             client.query(delete_statement) if !delete_statement.nil?
         end
+        return success
     end
     
     def delete?
@@ -163,7 +164,7 @@ class Item
     end
 
     def delete
-        return false unless delete?
+        return false unless self.delete?
         client = MySQLDB.get_client
         client.query("DELETE FROM items WHERE id = #{@id}")
         return true

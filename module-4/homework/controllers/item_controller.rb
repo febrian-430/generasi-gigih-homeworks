@@ -48,8 +48,8 @@ class ItemController
                 params["categories"].map{|category| Category.new(category.to_i, nil) } 
                 :
                 []
-            
-            item.update
+            success = item.update
+            return success
         end
     end
 
@@ -75,7 +75,14 @@ class ItemController
     end
 
     def self.delete(params)
-        id = params["id"].to_i
-        return Item.new(id, "", "").delete
+        if !params["id"]
+            return false
+        end
+        item = Item.get_item_by_id(params["id"].to_i)
+        if !item
+            return false
+        else
+            return item.delete
+        end
     end
 end
