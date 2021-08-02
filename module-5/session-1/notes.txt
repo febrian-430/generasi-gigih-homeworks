@@ -1,0 +1,29 @@
+common practices:
+1. 'develop' branch
+    ketika siap, merge ke main
+    main harus stabil
+
+2. feature branches
+    branching dari develop branch
+    merge ke develop branch
+
+3. release branch (dont understand)
+    yang di release branchnya
+
+4. hotfix branch
+
+
+5. GOJEK WAY (trunk base development)
+
+    pull dan push semua  master
+    hybrid
+    kadang PR kadang ini
+
+feature flag
+ on off feature
+ bisa dari env var atau config
+
+ explore canary deployment, traffic mirroring
+
+ vagrant siapin mesin
+ ansible run app
