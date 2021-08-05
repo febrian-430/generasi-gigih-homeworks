@@ -13,10 +13,6 @@ get '/' do
     ItemController.index
 end
 
-get '/commit' do
-    MySQLDB.commit
-end
-
 get '/items' do
     ItemController.items(params)
 end

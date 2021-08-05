@@ -1,0 +1,44 @@
+gbe01061-server 34.80.119.157
+
+deployment steps:
+    (compiled lang) program di build
+    (interpreted) di zip atau tar 
+    di push ke server
+
+VM: isolated
+
+Virtualization techs:
+linux kvm
+vmware
+hyperv
+
+Vagrant:
+automate membuat VM
+reproducible
+
+
+nodejs
+yarn
+redis-server
+git-core curl 
+zlib1g-dev 
+build-essential 
+libssl-dev 
+libreadline-dev 
+libyaml-dev 
+libsqlite3-dev 
+sqlite3 
+libxml2-dev 
+libxslt1-dev 
+libcurl4-openssl-dev 
+software-properties-common 
+libffi-dev 
+dirmngr 
+gnupg 
+apt-transport-https 
+ca-certificates 
+redis-server 
+redis-tools 
+nodejs 
+yarn
+
