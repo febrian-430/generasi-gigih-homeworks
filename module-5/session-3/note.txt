@@ -1,0 +1,2 @@
+ansible ada check state apa saja yg diinstall untuk setiap VM
+ansible stop if a task failed, ansible runs sequentially
