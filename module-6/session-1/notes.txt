@@ -1,0 +1,27 @@
+clean code
+
+naming:
+- intention-revealing
+- pronouncable and searchable
+- meaningful distinction
+- one word per concept eg. fetch/get/find
+- class and method names
+
+functions:
+- small
+- do one thing
+- limit arguments
+- prefer fewer arguments
+- have no side effects => nama sesuai apa yg dia lakukan,
+ga ngelakuin hal apa2 lg
+
+general principles:
+- dry
+- law of demeter => a method 'f' of a class C should only
+    call the methods of:
+        - objects from class C
+        - objects created by f
+        - objects passed as arguments to f
+        - objects held in instance variable of C
+
+- follow conventions
