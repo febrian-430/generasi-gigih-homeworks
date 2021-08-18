@@ -1,0 +1,12 @@
+smells:
+- bloaters: code/method/class yang semakin lama akan jadi susah to work with
+- oo abusers: incorrect application of oop
+- change preventers: if u need to change smth, u have to make many changes in other place
+- dispensables: pointless code
+- couplers:
+
+refactor checklists:
+- cleaner
+- no new functionality
+- all existing tests/features must not fail
+
