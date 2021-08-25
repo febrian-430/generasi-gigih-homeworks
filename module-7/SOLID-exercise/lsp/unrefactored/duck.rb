@@ -1,9 +1,7 @@
 require_relative 'bird'
 
-class Ostrich < Bird
-
+class Duck < Bird
   def sound
-    "bark"
+    "quack"
   end
-  
 end

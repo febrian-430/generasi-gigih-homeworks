@@ -5,8 +5,9 @@ describe Ostrich do
   ostrich = Ostrich.new
   expect(ostrich.sound).to eq("bark")
  end
+
  it "won't fly" do
   ostrich = Ostrich.new
-  expect{ostrich.fly}.to raise_error("I can't fly")
+  expect{ostrich.fly}.to raise_error(NoMethodError)
  end
 end

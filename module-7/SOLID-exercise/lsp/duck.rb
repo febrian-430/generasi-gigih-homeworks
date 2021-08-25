@@ -1,7 +1,9 @@
-require_relative 'bird'
+require_relative './flight'
 
-class Duck < Bird
+class Duck < Flight
+  
   def sound
     "quack"
   end
+  
 end

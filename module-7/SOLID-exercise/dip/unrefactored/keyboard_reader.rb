@@ -1,5 +1,4 @@
-require_relative 'reader'
-class KeyboardReader < Reader
+class KeyboardReader
 	def name
 		"keyboard"
 	end

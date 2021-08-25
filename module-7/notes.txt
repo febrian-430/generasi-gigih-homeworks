@@ -1,0 +1,16 @@
+LSP
+principle of least surprise:
+    - ada raise error
+    - unexpected return type
+    - side effect dalam method (nama method ga ngejelasin side effectnya)
+
+
+public interfaces:
+    - reveal their primary responsibility
+    - expect to be invoked
+    - will not change on a whim
+    - be safe for others to rely on
+    - be documented in tests
+
+
+jangan ubah state tanpa class

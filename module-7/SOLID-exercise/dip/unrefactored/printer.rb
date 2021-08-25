@@ -1,6 +1,4 @@
-require_relative 'writer'
-
-class Printer < Writer
+class Printer
 	def write(input, reader_name)
 		"printer prints '#{input}' from #{reader_name}"
 	end
