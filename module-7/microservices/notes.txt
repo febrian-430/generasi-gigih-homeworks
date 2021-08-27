@@ -1,0 +1,29 @@
+Monolith
+- one lang for one codebase
+- scalability (cant scale one service) (one service has more traffic than the other)
+- a change affect all
+- a bug in a service affects all
+
+comms:
+async:
+- event driven
+- commsthru common data
+    - make a common worker 
+    - every service push an event/job to worker
+    - worker push to job queue
+    - the job queue
+    - job queue then get consumed by relevant workers
+
+- async request-response
+
+Scope of a service:
+    - business domain
+    - if a service have some distinctive feature/behavior, seperate it
+
+Authentication:
+    use auth token on auth service so that no need to be authenticated on every other service when doing a request
+
+    AUTHORIZATION:
+    RBAC 
+
+Contract: Stripe API
